@@ -7,7 +7,7 @@ import {LOGIN_USER} from '../utils/mutations'
 import Auth from '../utils/auth';
 
 const LoginForm = () => {
-  const [userFormData, setUserFormData] = useState({ email: '', password: '' });
+  const [userFormInfo, setUserFormInfo] = useState({ email: '', password: '' });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
@@ -24,7 +24,7 @@ const LoginForm = () => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setUserFormData({ ...userFormData, [name]: value });
+    setUserFormInfo({ ...userFormInfo, [name]: value });
   };
 
   const handleFormSubmit = async (event) => {
@@ -39,16 +39,16 @@ const LoginForm = () => {
 
     try {
       const {data} = await login({
-        variables: {...userFormData},
+        variables: {...userFormInfo},
       });
 
-      console.log(user);
+      console.log(data);
       Auth.login(data.login.token);
     } catch (err) {
       console.error(err);
     }
 
-    setUserFormData({
+    setUserFormInfo({
       username: '',
       email: '',
       password: '',
@@ -73,7 +73,7 @@ const LoginForm = () => {
             placeholder='Your email'
             name='email'
             onChange={handleInputChange}
-            value={userFormData.email}
+            value={userFormInfo.email}
             required
           />
           <Form.Control.Feedback type='invalid'>Email is required!</Form.Control.Feedback>
@@ -86,13 +86,13 @@ const LoginForm = () => {
             placeholder='Your password'
             name='password'
             onChange={handleInputChange}
-            value={userFormData.password}
+            value={userFormInfo.password}
             required
           />
           <Form.Control.Feedback type='invalid'>Password is required!</Form.Control.Feedback>
         </Form.Group>
         <Button
-          disabled={!(userFormData.email && userFormData.password)}
+          disabled={!(userFormInfo.email && userFormInfo.password)}
           type='submit'
           variant='success'>
           Submit
